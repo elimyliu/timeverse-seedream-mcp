@@ -76,6 +76,12 @@ async def list_tools() -> list[types.Tool]:
                         "default": "png",
                         "enum": ["png", "jpeg"],
                     },
+                    "response_format": {
+                        "type": "string",
+                        "description": "返回格式: url（返回图片链接）或 b64_json（返回base64编码图片数据）",
+                        "default": "url",
+                        "enum": ["url", "b64_json"],
+                    },
                     "watermark": {
                         "type": "boolean",
                         "description": "是否添加水印",
@@ -83,7 +89,7 @@ async def list_tools() -> list[types.Tool]:
                     },
                     "save_to": {
                         "type": "string",
-                        "description": "保存图片到本地目录路径（可选）。如: /Users/xxx/images",
+                        "description": "保存图片到本地目录路径（b64_json 模式必填）。如: /Users/xxx/images",
                     },
                 },
                 "required": ["prompt"],
@@ -134,6 +140,12 @@ async def list_tools() -> list[types.Tool]:
                         "default": "png",
                         "enum": ["png", "jpeg"],
                     },
+                    "response_format": {
+                        "type": "string",
+                        "description": "返回格式: url（返回图片链接）或 b64_json（返回base64编码图片数据）",
+                        "default": "url",
+                        "enum": ["url", "b64_json"],
+                    },
                     "watermark": {
                         "type": "boolean",
                         "description": "是否添加水印",
@@ -141,7 +153,7 @@ async def list_tools() -> list[types.Tool]:
                     },
                     "save_to": {
                         "type": "string",
-                        "description": "保存图片到本地目录路径（可选）",
+                        "description": "保存图片到本地目录路径（b64_json 模式必填）",
                     },
                 },
                 "required": ["prompt", "image_url"],
@@ -187,6 +199,12 @@ async def list_tools() -> list[types.Tool]:
                         "default": "png",
                         "enum": ["png", "jpeg"],
                     },
+                    "response_format": {
+                        "type": "string",
+                        "description": "返回格式: url（返回图片链接）或 b64_json（返回base64编码图片数据）",
+                        "default": "url",
+                        "enum": ["url", "b64_json"],
+                    },
                     "watermark": {
                         "type": "boolean",
                         "description": "是否添加水印",
@@ -194,7 +212,7 @@ async def list_tools() -> list[types.Tool]:
                     },
                     "save_to": {
                         "type": "string",
-                        "description": "保存图片到本地目录路径（可选）",
+                        "description": "保存图片到本地目录路径（b64_json 模式必填）",
                     },
                 },
                 "required": ["prompt", "image_urls"],
@@ -241,6 +259,12 @@ async def list_tools() -> list[types.Tool]:
                         "default": "png",
                         "enum": ["png", "jpeg"],
                     },
+                    "response_format": {
+                        "type": "string",
+                        "description": "返回格式: url（返回图片链接）或 b64_json（返回base64编码图片数据）",
+                        "default": "url",
+                        "enum": ["url", "b64_json"],
+                    },
                     "watermark": {
                         "type": "boolean",
                         "description": "是否添加水印",
@@ -248,7 +272,7 @@ async def list_tools() -> list[types.Tool]:
                     },
                     "save_to": {
                         "type": "string",
-                        "description": "保存图片到本地目录路径（可选）",
+                        "description": "保存图片到本地目录路径（b64_json 模式必填）",
                     },
                 },
                 "required": ["prompt"],
@@ -288,6 +312,12 @@ Seedream 5.0 专属功能，在生图前先搜索互联网获取实时信息，
                         "default": "png",
                         "enum": ["png", "jpeg"],
                     },
+                    "response_format": {
+                        "type": "string",
+                        "description": "返回格式: url（返回图片链接）或 b64_json（返回base64编码图片数据）",
+                        "default": "url",
+                        "enum": ["url", "b64_json"],
+                    },
                     "watermark": {
                         "type": "boolean",
                         "description": "是否添加水印",
@@ -295,7 +325,7 @@ Seedream 5.0 专属功能，在生图前先搜索互联网获取实时信息，
                     },
                     "save_to": {
                         "type": "string",
-                        "description": "保存图片到本地目录路径（可选）",
+                        "description": "保存图片到本地目录路径（b64_json 模式必填）",
                     },
                 },
                 "required": ["prompt"],
@@ -325,6 +355,7 @@ async def call_tool(
             n=arguments.get("n", 1),
             model=arguments.get("model"),
             output_format=arguments.get("output_format", "png"),
+            response_format=arguments.get("response_format", "url"),
             watermark=arguments.get("watermark", False),
             save_to=arguments.get("save_to"),
         )
@@ -336,6 +367,7 @@ async def call_tool(
             model=arguments.get("model"),
             scale=arguments.get("scale", 0.5),
             output_format=arguments.get("output_format", "png"),
+            response_format=arguments.get("response_format", "url"),
             watermark=arguments.get("watermark", False),
             save_to=arguments.get("save_to"),
         )
@@ -346,6 +378,7 @@ async def call_tool(
             size=arguments.get("size", "2K"),
             model=arguments.get("model"),
             output_format=arguments.get("output_format", "png"),
+            response_format=arguments.get("response_format", "url"),
             watermark=arguments.get("watermark", False),
             save_to=arguments.get("save_to"),
         )
@@ -356,6 +389,7 @@ async def call_tool(
             size=arguments.get("size", "2K"),
             model=arguments.get("model"),
             output_format=arguments.get("output_format", "png"),
+            response_format=arguments.get("response_format", "url"),
             watermark=arguments.get("watermark", False),
             save_to=arguments.get("save_to"),
         )
@@ -365,6 +399,7 @@ async def call_tool(
             size=arguments.get("size", "2K"),
             model=arguments.get("model"),
             output_format=arguments.get("output_format", "png"),
+            response_format=arguments.get("response_format", "url"),
             watermark=arguments.get("watermark", False),
             save_to=arguments.get("save_to"),
         )

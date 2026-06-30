@@ -1,6 +1,6 @@
 [project]
 name = "timeverse-seedream-mcp"
-version = "0.1.1"
+version = "0.1.2"
 description = "Seedream 图片生成 MCP Server - 基于火山引擎 Seedream 模型的图像生成工具"
 readme = "README.md"
 requires-python = ">=3.10"

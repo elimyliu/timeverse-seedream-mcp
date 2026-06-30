@@ -20,6 +20,12 @@ from timeverse_seedream_mcp.client import SeedreamClient
 from timeverse_seedream_mcp.config import settings
 
 
+def _validate_response_format(response_format: str, save_to: Optional[str]) -> None:
+    """校验 response_format 和 save_to 的组合合法性"""
+    if response_format == "b64_json" and not save_to:
+        raise ValueError("response_format=b64_json 时 save_to 参数为必填，请指定图片保存目录")
+
+
 def _format_result(
     data: list[dict],
     revised_prompt: Optional[str] = None,
@@ -68,6 +74,7 @@ async def handle_text_to_image(
     n: int = 1,
     model: Optional[str] = None,
     output_format: str = "png",
+    response_format: str = "url",
     watermark: bool = False,
     save_to: Optional[str] = None,
 ) -> list[TextContent | ImageContent]:
@@ -80,19 +87,20 @@ async def handle_text_to_image(
         n: 生成图片数量 (1-4)
         model: 模型版本，默认 5.0
         output_format: 输出格式 (png/jpeg)
+        response_format: 返回格式，url 或 b64_json
         watermark: 是否添加水印
-        save_to: 保存图片到本地目录（可选）
+        save_to: 保存图片到本地目录（b64_json 模式必填）
     """
     client = SeedreamClient(model=model or settings.volc_model)
+    _validate_response_format(response_format, save_to)
 
     try:
-        # 使用 b64_json 模式以便支持保存和图片展示
         resp = await client.generate(
             prompt=prompt,
             size=size,
             n=n,
             output_format=output_format,
-            response_format="b64_json",
+            response_format=response_format,
             watermark=watermark,
         )
 
@@ -132,6 +140,7 @@ async def handle_image_to_image(
     model: Optional[str] = None,
     scale: float = 0.5,
     output_format: str = "png",
+    response_format: str = "url",
     watermark: bool = False,
     save_to: Optional[str] = None,
 ) -> list[TextContent | ImageContent]:
@@ -145,10 +154,12 @@ async def handle_image_to_image(
         model: 模型版本（需 4.5 或 5.0）
         scale: 文本描述影响程度 (0-1)，越大文本影响越大
         output_format: 输出格式
+        response_format: 返回格式，url 或 b64_json
         watermark: 是否添加水印
-        save_to: 保存图片到本地目录（可选）
+        save_to: 保存图片到本地目录（b64_json 模式必填）
     """
     client = SeedreamClient(model=model or settings.volc_model)
+    _validate_response_format(response_format, save_to)
 
     try:
         resp = await client.generate(
@@ -157,7 +168,7 @@ async def handle_image_to_image(
             n=1,
             image_urls=[image_url],
             output_format=output_format,
-            response_format="b64_json",
+            response_format=response_format,
             watermark=watermark,
             extra_body={"scale": scale},
         )
@@ -197,6 +208,7 @@ async def handle_merge_images(
     size: str = "2K",
     model: Optional[str] = None,
     output_format: str = "png",
+    response_format: str = "url",
     watermark: bool = False,
     save_to: Optional[str] = None,
 ) -> list[TextContent | ImageContent]:
@@ -209,13 +221,15 @@ async def handle_merge_images(
         size: 输出尺寸
         model: 模型版本（需 4.5 或 5.0）
         output_format: 输出格式
+        response_format: 返回格式，url 或 b64_json
         watermark: 是否添加水印
-        save_to: 保存图片到本地目录（可选）
+        save_to: 保存图片到本地目录（b64_json 模式必填）
     """
     if len(image_urls) > 10:
         return [TextContent(type="text", text="❌ 图片数量不能超过 10 张")]
 
     client = SeedreamClient(model=model or settings.volc_model)
+    _validate_response_format(response_format, save_to)
 
     try:
         resp = await client.generate(
@@ -224,7 +238,7 @@ async def handle_merge_images(
             n=1,
             image_urls=image_urls,
             output_format=output_format,
-            response_format="b64_json",
+            response_format=response_format,
             watermark=watermark,
         )
 
@@ -263,6 +277,7 @@ async def handle_generate_sequence(
     size: str = "2K",
     model: Optional[str] = None,
     output_format: str = "png",
+    response_format: str = "url",
     watermark: bool = False,
     save_to: Optional[str] = None,
 ) -> list[TextContent | ImageContent]:
@@ -275,10 +290,12 @@ async def handle_generate_sequence(
         size: 输出尺寸
         model: 模型版本（需 4.5 或 5.0）
         output_format: 输出格式
+        response_format: 返回格式，url 或 b64_json
         watermark: 是否添加水印
-        save_to: 保存图片到本地目录（可选）
+        save_to: 保存图片到本地目录（b64_json 模式必填）
     """
     client = SeedreamClient(model=model or settings.volc_model)
+    _validate_response_format(response_format, save_to)
 
     try:
         resp = await client.generate(
@@ -288,7 +305,7 @@ async def handle_generate_sequence(
             sequential="auto",
             max_images=max_images,
             output_format=output_format,
-            response_format="b64_json",
+            response_format=response_format,
             watermark=watermark,
         )
 
@@ -328,6 +345,7 @@ async def handle_web_search_generate(
     size: str = "2K",
     model: Optional[str] = None,
     output_format: str = "png",
+    response_format: str = "url",
     watermark: bool = False,
     save_to: Optional[str] = None,
 ) -> list[TextContent | ImageContent]:
@@ -339,10 +357,12 @@ async def handle_web_search_generate(
         size: 输出尺寸
         model: 模型版本（需 5.0）
         output_format: 输出格式
+        response_format: 返回格式，url 或 b64_json
         watermark: 是否添加水印
-        save_to: 保存图片到本地目录（可选）
+        save_to: 保存图片到本地目录（b64_json 模式必填）
     """
     client = SeedreamClient(model=model or "doubao-seedream-5-0-260128")
+    _validate_response_format(response_format, save_to)
 
     # 联网搜索工具定义
     web_search_tool = {
@@ -360,7 +380,7 @@ async def handle_web_search_generate(
             size=size,
             n=1,
             output_format=output_format,
-            response_format="b64_json",
+            response_format=response_format,
             watermark=watermark,
             tools=[web_search_tool],
         )
