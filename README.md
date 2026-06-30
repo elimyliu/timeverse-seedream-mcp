@@ -24,6 +24,10 @@
 ### 安装
 
 ```bash
+# 方式一：使用 uvx（推荐，自动管理依赖）
+uvx timeverse-seedream-mcp
+
+# 方式二：使用 pip
 pip install timeverse-seedream-mcp
 ```
 
@@ -49,7 +53,8 @@ timeverse-seedream-mcp
 {
   "mcpServers": {
     "seedream": {
-      "command": "timeverse-seedream-mcp",
+      "command": "uvx",
+      "args": ["timeverse-seedream-mcp"],
       "env": {
         "VOLC_API_KEY": "your-api-key-here",
         "VOLC_MODEL": "doubao-seedream-5-0-260128"
@@ -58,6 +63,10 @@ timeverse-seedream-mcp
   }
 }
 ```
+
+> 需要先安装 [uv](https://docs.astral.sh/uv/)：`brew install uv` 或 `pip install uv`
+>
+> `uvx` 会自动下载并运行，无需手动 `pip install`。如果已通过 `pip install` 安装，也可直接配置 `"command": "timeverse-seedream-mcp"`。
 
 ## 工具列表
 
