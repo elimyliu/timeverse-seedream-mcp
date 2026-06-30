@@ -428,8 +428,8 @@ async def main() -> None:
     try:
         settings.validate()
         print(f"✓ Seedream MCP Server 启动中...")
-        print(f"  - 模型: {settings.VOLC_MODEL}")
-        print(f"  - API: {settings.VOLC_BASE_URL}")
+        print(f"  - 模型: {settings.volc_model}")
+        print(f"  - API: {settings.volc_base_url}")
         print(f"  - 可用工具: seedream_text_to_image, seedream_image_to_image, "
               f"seedream_merge_images, seedream_generate_sequence, "
               f"seedream_web_search_generate, seedream_list_models")

@@ -83,7 +83,7 @@ async def handle_text_to_image(
         watermark: 是否添加水印
         save_to: 保存图片到本地目录（可选）
     """
-    client = SeedreamClient(model=model or settings.VOLC_MODEL)
+    client = SeedreamClient(model=model or settings.volc_model)
 
     try:
         # 使用 b64_json 模式以便支持保存和图片展示
@@ -148,7 +148,7 @@ async def handle_image_to_image(
         watermark: 是否添加水印
         save_to: 保存图片到本地目录（可选）
     """
-    client = SeedreamClient(model=model or settings.VOLC_MODEL)
+    client = SeedreamClient(model=model or settings.volc_model)
 
     try:
         resp = await client.generate(
@@ -215,7 +215,7 @@ async def handle_merge_images(
     if len(image_urls) > 10:
         return [TextContent(type="text", text="❌ 图片数量不能超过 10 张")]
 
-    client = SeedreamClient(model=model or settings.VOLC_MODEL)
+    client = SeedreamClient(model=model or settings.volc_model)
 
     try:
         resp = await client.generate(
@@ -278,7 +278,7 @@ async def handle_generate_sequence(
         watermark: 是否添加水印
         save_to: 保存图片到本地目录（可选）
     """
-    client = SeedreamClient(model=model or settings.VOLC_MODEL)
+    client = SeedreamClient(model=model or settings.volc_model)
 
     try:
         resp = await client.generate(
